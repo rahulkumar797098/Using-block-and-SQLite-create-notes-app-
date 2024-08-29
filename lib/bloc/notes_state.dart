@@ -15,7 +15,6 @@ class NotesLoadedState extends NotesState {
   NotesLoadedState(this.notes);
 }
 
-
 // error
 class NotesErrorState extends NotesState {
   final String message;

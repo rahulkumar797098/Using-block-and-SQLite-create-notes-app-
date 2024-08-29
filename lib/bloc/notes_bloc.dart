@@ -1,7 +1,11 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:using_bloc_notes_app/bloc/notes_event.dart';
-import 'package:using_bloc_notes_app/bloc/notes_state.dart';
+
 import '../database/db_helper.dart';
+import 'notes_event.dart';
+import 'notes_event.dart';
+import 'notes_event.dart';
+import 'notes_event.dart';
+import 'notes_state.dart';
 
 class NotesBloc extends Bloc<NotesEvent, NotesState> {
   final DBHelper db;
@@ -29,6 +33,38 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
       try {
         var allNotes = await db.getAllNotes();
         emit(NotesLoadedState(allNotes));
+      } catch (e) {
+        emit(NotesErrorState("An error occurred: ${e.toString()}"));
+      }
+    });
+
+    // Handle DeleteNoteEvent
+    on<DeleteNoteEvent>((event, emit) async {
+      emit(NotesLoadingState());
+      try {
+        int check = await db.deleteNotes(event.id);
+        if (check > 0) {
+          final allNotes = await db.getAllNotes();
+          emit(NotesLoadedState(allNotes));
+        } else {
+          emit(NotesErrorState("Failed to delete note"));
+        }
+      } catch (e) {
+        emit(NotesErrorState("An error occurred: ${e.toString()}"));
+      }
+    });
+
+    // Handle UpdateNoteEvent
+    on<UpdateNoteEvent>((event, emit) async {
+      emit(NotesLoadingState());
+      try {
+        int check = await db.updateNotes(event.note);
+        if (check > 0) {
+          final allNotes = await db.getAllNotes();
+          emit(NotesLoadedState(allNotes));
+        } else {
+          emit(NotesErrorState("Failed to update note"));
+        }
       } catch (e) {
         emit(NotesErrorState("An error occurred: ${e.toString()}"));
       }

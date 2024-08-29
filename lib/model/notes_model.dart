@@ -19,6 +19,8 @@ class NotesModel {
 
   factory NotesModel.fromMap(Map<String, dynamic> map) {
     return NotesModel(
-        id: map['id'], message: map['message'], title: map['title']);
+        id: map['id'],
+        message: map['message'],
+        title: map['title']);
   }
 }
